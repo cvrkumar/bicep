@@ -124,13 +124,7 @@ namespace Bicep.Core.Semantics
             return this;
         }
 
-        public FunctionOverloadBuilder WithRequiredVariableParameter(string namePrefix, TypeSymbol type, string description)
-        {
-            // TODO:
-            this.VariableParameter = new VariableFunctionParameter(namePrefix, type, description);
-        }
-
-        public FunctionOverloadBuilder WithOptionalVariableParameter(string namePrefix, TypeSymbol type, string description)
+        public FunctionOverloadBuilder WithVariableParameter(string namePrefix, TypeSymbol type, int minimumCount, string description)
         {
             // TODO:
             this.VariableParameter = new VariableFunctionParameter(namePrefix, type, description);

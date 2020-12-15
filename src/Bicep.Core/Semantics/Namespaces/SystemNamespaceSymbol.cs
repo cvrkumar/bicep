@@ -19,20 +19,20 @@ namespace Bicep.Core.Semantics.Namespaces
             new FunctionOverloadBuilder("concat")
                 .WithReturnType(LanguageConstants.Array)
                 .WithDescription("Combines multiple arrays and returns the concatenated array.")
-                .WithRequiredVariableParameter("arg", LanguageConstants.Array, "The array for concatenation")
+                .WithVariableParameter("arg", LanguageConstants.Array, minimumCount: 1, "The array for concatenation")
                 .Build(),
 
             new FunctionOverloadBuilder("concat")
                 .WithReturnType(LanguageConstants.String)
                 .WithDescription("Combines multiple string, integer, or boolean values and returns them as a concatenated string.")
-                .WithRequiredVariableParameter("arg", UnionType.Create(LanguageConstants.String, LanguageConstants.Int, LanguageConstants.Bool), "The string, int, or boolean value for concatenation")
+                .WithVariableParameter("arg", UnionType.Create(LanguageConstants.String, LanguageConstants.Int, LanguageConstants.Bool), minimumCount: 1, "The string, int, or boolean value for concatenation")
                 .Build(),
 
             new FunctionOverloadBuilder("format")
                 .WithReturnType(LanguageConstants.String)
                 .WithDescription("Creates a formatted string from input values.")
                 .WithRequiredParameter("formatString", LanguageConstants.String, "The composite format string.")
-                .WithOptionalVariableParameter("arg", LanguageConstants.Any, "The value to include in the formatted string.")
+                .WithVariableParameter("arg", LanguageConstants.Any, minimumCount: 0, "The value to include in the formatted string.")
                 .Build(),
 
             new FunctionOverloadBuilder("base64")
@@ -97,13 +97,13 @@ namespace Bicep.Core.Semantics.Namespaces
             new FunctionOverloadBuilder("uniqueString")
                 .WithReturnType(LanguageConstants.String)
                 .WithDescription("Creates a deterministic hash string based on the values provided as parameters.")
-                .WithRequiredVariableParameter("arg", LanguageConstants.String, "The value used in the hash function to create a unique string.")
+                .WithVariableParameter("arg", LanguageConstants.String, minimumCount: 1, "The value used in the hash function to create a unique string.")
                 .Build(),
 
             new FunctionOverloadBuilder("guid")
                 .WithReturnType(LanguageConstants.String)
                 .WithDescription("Creates a value in the format of a globally unique identifier based on the values provided as parameters.")
-                .WithRequiredVariableParameter("arg", LanguageConstants.String, "The value used in the hash function to create the GUID.")
+                .WithVariableParameter("arg", LanguageConstants.String, minimumCount: 1, "The value used in the hash function to create the GUID.")
                 .Build(),
 
             new FunctionOverloadBuilder("trim")
@@ -142,75 +142,93 @@ namespace Bicep.Core.Semantics.Namespaces
                 .WithRequiredParameter("numberToTake", LanguageConstants.Int, "The number of characters to take. If this value is 0 or less, an empty string is returned. If it is larger than the length of the given string, all the characters are returned.")
                 .Build(),
 
-            // TODO: Resume here
             new FunctionOverloadBuilder("skip")
                 .WithReturnType(LanguageConstants.Array)
-                .WithFixedParameters(LanguageConstants.Array, LanguageConstants.Int)
+                .WithDescription("Returns an array with all the elements after the specified number in the array.")
+                .WithRequiredParameter("originalValue", LanguageConstants.Array, "The array to use for skipping.")
+                .WithRequiredParameter("numberToSkip", LanguageConstants.Int, "The number of elements to skip. If this value is 0 or less, all the elements in the value are returned. If it is larger than the length of the array, an empty array is returned.")
                 .Build(),
 
             new FunctionOverloadBuilder("skip")
                 .WithReturnType(LanguageConstants.String)
-                .WithFixedParameters(LanguageConstants.String, LanguageConstants.Int)
+                .WithDescription("Returns a string with all the characters after the specified number in the string.")
+                .WithRequiredParameter("originalValue", LanguageConstants.String, "The string to use for skipping.")
+                .WithRequiredParameter("numberToSkip", LanguageConstants.Int, "The number of characters to skip. If this value is 0 or less, all the characters in the value are returned. If it is larger than the length of the string, an empty string is returned.")
                 .Build(),
 
             new FunctionOverloadBuilder("empty")
                 .WithReturnType(LanguageConstants.Bool)
-                .WithFixedParameters(UnionType.Create(LanguageConstants.Null, LanguageConstants.Object, LanguageConstants.Array, LanguageConstants.String))
+                .WithDescription("Determines if an array, object, or string is empty.")
+                .WithRequiredParameter("itemToTest", UnionType.Create(LanguageConstants.Null, LanguageConstants.Object, LanguageConstants.Array, LanguageConstants.String), "The value to check if it is empty.")
                 .Build(),
 
             new FunctionOverloadBuilder("contains")
                 .WithReturnType(LanguageConstants.Bool)
-                .WithFixedParameters(LanguageConstants.Object, LanguageConstants.String)
+                .WithDescription("Checks whether an object contains a property. The property name comparison is case-insensitive.")
+                .WithRequiredParameter("object", LanguageConstants.Object, "The object")
+                .WithRequiredParameter("propertyName", LanguageConstants.String, "The property name.")
                 .Build(),
 
             new FunctionOverloadBuilder("contains")
                 .WithReturnType(LanguageConstants.Bool)
-                .WithFixedParameters(LanguageConstants.Array, LanguageConstants.Any)
+                .WithDescription("Checks whether an array contains a value.")
+                .WithRequiredParameter("array", LanguageConstants.Array, "The array")
+                .WithRequiredParameter("itemToFind", LanguageConstants.Any, "The value to find.")
                 .Build(),
 
             new FunctionOverloadBuilder("contains")
                 .WithReturnType(LanguageConstants.Bool)
-                .WithFixedParameters(LanguageConstants.String, LanguageConstants.String)
+                .WithDescription("Checks whether a string contains a substring. The string comparison is case-sensitive.")
+                .WithRequiredParameter("string", LanguageConstants.String, "The string.")
+                .WithRequiredParameter("itemToFind", LanguageConstants.String, "The value to find.")
                 .Build(),
 
             new FunctionOverloadBuilder("intersection")
                 .WithReturnType(LanguageConstants.Object)
-                .WithVariableParameters(2, LanguageConstants.Object)
+                .WithDescription("Returns a single object with the common elements from the parameters.")
+                .WithVariableParameter("object", LanguageConstants.Object, minimumCount: 2, "The object to use for finding common elements.")
                 .Build(),
 
             new FunctionOverloadBuilder("intersection")
                 .WithReturnType(LanguageConstants.Array)
-                .WithVariableParameters(2, LanguageConstants.Array)
+                .WithDescription("Returns a single array with the common elements from the parameters.")
+                .WithVariableParameter("array", LanguageConstants.Array, minimumCount: 2, "The array to use for finding common elements.")
                 .Build(),
 
             new FunctionOverloadBuilder("union")
                 .WithReturnType(LanguageConstants.Object)
-                .WithVariableParameters(2, LanguageConstants.Object)
+                .WithDescription("Returns a single object with all elements from the parameters. Duplicate keys are only included once.")
+                .WithVariableParameter("object", LanguageConstants.Object, minimumCount: 2, "The first object to use for joining elements.")
                 .Build(),
 
             new FunctionOverloadBuilder("union")
                 .WithReturnType(LanguageConstants.Array)
-                .WithVariableParameters(2, LanguageConstants.Array)
+                .WithDescription("Returns a single array with all elements from the parameters. Duplicate values are only included once.")
+                .WithVariableParameter("object", LanguageConstants.Array, minimumCount: 2, "The first array to use for joining elements.")
                 .Build(),
 
             new FunctionOverloadBuilder("first")
                 .WithReturnType(LanguageConstants.Any)
-                .WithFixedParameters(LanguageConstants.Array)
+                .WithDescription("Returns the first element of the array.")
+                .WithRequiredParameter("array", LanguageConstants.Array, "The value to retrieve the first element.")
                 .Build(),
 
             new FunctionOverloadBuilder("first")
                 .WithReturnType(LanguageConstants.String)
-                .WithFixedParameters(LanguageConstants.String)
+                .WithDescription("Returns the first character of the string.")
+                .WithRequiredParameter("string", LanguageConstants.String, "The value to retrieve the first character.")
                 .Build(),
 
             new FunctionOverloadBuilder("last")
                 .WithReturnType(LanguageConstants.Any)
-                .WithFixedParameters(LanguageConstants.Array)
+                .WithDescription("Returns the last element of the array.")
+                .WithRequiredParameter("array", LanguageConstants.Array, "The value to retrieve the last element.")
                 .Build(),
 
             new FunctionOverloadBuilder("last")
                 .WithReturnType(LanguageConstants.String)
-                .WithFixedParameters(LanguageConstants.String)
+                .WithDescription("Returns the last character of the string.")
+                .WithRequiredParameter("string", LanguageConstants.String, "The value to retrieve the last character.")
                 .Build(),
 
             new FunctionOverloadBuilder("indexOf")
