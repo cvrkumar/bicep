@@ -341,42 +341,50 @@ namespace Bicep.Core.Semantics.Namespaces
 
             new FunctionOverloadBuilder("coalesce")
                 .WithReturnType(LanguageConstants.Any)
-                .WithVariableParameters(1, LanguageConstants.Any)
+                .WithDescription("Returns first non-null value from the parameters. Empty strings, empty arrays, and empty objects are not null.")
+                .WithVariableParameter("arg", LanguageConstants.Any, minimumCount: 1, "The value to coalesce")
                 .Build(),
 
             // TODO: Requires number type
             //new FunctionOverloadBuilder("float")
             //    .WithReturnType(LanguageConstants.Number)
-            //    .WithFixedParameters(LanguageConstants.Any)
+            //    .WithDescription("Converts the value to a floating point number. You only use this function when passing custom parameters to an application, such as a Logic App.")
+            //    .WithRequiredParameter("value", LanguageConstants.Any, "The value to convert to a floating point number.")
             //    .Build(),
 
             new FunctionOverloadBuilder("bool")
                 .WithReturnType(LanguageConstants.Bool)
-                .WithFixedParameters(LanguageConstants.Any)
+                .WithDescription("Converts the parameter to a boolean.")
+                .WithRequiredParameter("value", LanguageConstants.Any, "The value to convert to a boolean.")
                 .Build(),
 
             new FunctionOverloadBuilder("json")
                 .WithReturnType(LanguageConstants.Any)
-                .WithFixedParameters(LanguageConstants.String)
+                .WithDescription("Converts a valid JSON string into a JSON data type.")
+                .WithRequiredParameter("json", LanguageConstants.String, "The value to convert to JSON. The string must be a properly formatted JSON string.")
                 .Build(),
 
             new FunctionOverloadBuilder("dateTimeAdd")
                 .WithReturnType(LanguageConstants.String)
-                .WithOptionalFixedParameters(2, LanguageConstants.String, LanguageConstants.String, LanguageConstants.String)
+                .WithDescription("Adds a time duration to a base value. ISO 8601 format is expected.")
+                .WithRequiredParameter("base", LanguageConstants.String, "The starting datetime value for the addition. [Use ISO 8601 timestamp format](https://en.wikipedia.org/wiki/ISO_8601).")
+                .WithRequiredParameter("duration", LanguageConstants.String, "The time value to add to the base. It can be a negative value. Use [ISO 8601 duration format](https://en.wikipedia.org/wiki/ISO_8601#Durations).")
+                .WithOptionalParameter("format", LanguageConstants.String, "The output format for the date time result. If not provided, the format of the base value is used. Use either [standard format strings](https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings) or [custom format strings](https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings).")
                 .Build(),
 
             // newGuid and utcNow are only allowed in parameter default values
             new FunctionOverloadBuilder("utcNow")
                 .WithReturnType(LanguageConstants.String)
-                .WithOptionalFixedParameters(0, LanguageConstants.String)
+                .WithDescription("Returns the current (UTC) datetime value in the specified format. If no format is provided, the ISO 8601 (yyyyMMddTHHmmssZ) format is used. **This function can only be used in the default value for a parameter**.")
+                .WithOptionalParameter("format", LanguageConstants.String, "The format. Use either [standard format strings](https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings) or [custom format strings](https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings).")
                 .WithFlags(FunctionFlags.ParamDefaultsOnly)
                 .Build(),
 
             new FunctionOverloadBuilder("newGuid")
                 .WithReturnType(LanguageConstants.String)
-                .WithFixedParameters()
+                .WithDescription("Returns a value in the format of a globally unique identifier. **This function can only be used in the default value for a parameter**.")
                 .WithFlags(FunctionFlags.ParamDefaultsOnly)
-                .Build(),
+                .Build()
         }.ToImmutableArray();
 
         // TODO: Add copyIndex here when we support loops.
