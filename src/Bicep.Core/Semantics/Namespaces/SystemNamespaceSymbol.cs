@@ -233,84 +233,110 @@ namespace Bicep.Core.Semantics.Namespaces
 
             new FunctionOverloadBuilder("indexOf")
                 .WithReturnType(LanguageConstants.Int)
-                .WithFixedParameters(LanguageConstants.String, LanguageConstants.String)
+                .WithDescription("Returns the first position of a value within a string. The comparison is case-insensitive.")
+                .WithRequiredParameter("stringToSearch", LanguageConstants.String, "The value that contains the item to find.")
+                .WithRequiredParameter("stringToFind", LanguageConstants.String, "The value to find.")
                 .Build(),
 
             new FunctionOverloadBuilder("lastIndexOf")
                 .WithReturnType(LanguageConstants.Int)
-                .WithFixedParameters(LanguageConstants.String, LanguageConstants.String)
+                .WithDescription("Returns the last position of a value within a string. The comparison is case-insensitive.")
+                .WithRequiredParameter("stringToSearch", LanguageConstants.String, "The value that contains the item to find.")
+                .WithRequiredParameter("stringToFind", LanguageConstants.String, "The value to find.")
                 .Build(),
 
             new FunctionOverloadBuilder("startsWith")
                 .WithReturnType(LanguageConstants.Bool)
-                .WithFixedParameters(LanguageConstants.String, LanguageConstants.String)
+                .WithDescription("Determines whether a string starts with a value. The comparison is case-insensitive.")
+                .WithRequiredParameter("stringToSearch", LanguageConstants.String, "The value that contains the item to find.")
+                .WithRequiredParameter("stringToFind", LanguageConstants.String, "The value to find.")
                 .Build(),
 
             new FunctionOverloadBuilder("endsWith")
                 .WithReturnType(LanguageConstants.Bool)
-                .WithFixedParameters(LanguageConstants.String, LanguageConstants.String)
+                .WithDescription("Determines whether a string ends with a value. The comparison is case-insensitive.")
+                .WithRequiredParameter("stringToSearch", LanguageConstants.String, "The value that contains the item to find.")
+                .WithRequiredParameter("stringToFind", LanguageConstants.String, "The value to find.")
                 .Build(),
 
             // TODO: Needs to support number type as well
+            // TODO: Docs need updates
             new FunctionOverloadBuilder("min")
                 .WithReturnType(LanguageConstants.Int)
-                .WithVariableParameters(1, LanguageConstants.Int)
+                .WithDescription("Returns the minimum value from the specified integers.")
+                .WithVariableParameter("int", LanguageConstants.Int, minimumCount: 1, "One of the integers used to calculate the minimum value")
                 .Build(),
 
+            // TODO: Docs need updates
             new FunctionOverloadBuilder("min")
                 .WithReturnType(LanguageConstants.Int)
-                .WithFixedParameters(LanguageConstants.Array)
+                .WithDescription("Returns the minimum value from an array of integers.")
+                .WithRequiredParameter("intArray", LanguageConstants.Array, "The array of integers.")
                 .Build(),
 
             // TODO: Needs to support number type as well
+            // TODO: Docs need updates
             new FunctionOverloadBuilder("max")
                 .WithReturnType(LanguageConstants.Int)
-                .WithVariableParameters(1, LanguageConstants.Int)
+                .WithDescription("Returns the maximum value from the specified integers.")
+                .WithVariableParameter("int", LanguageConstants.Int, minimumCount: 1, "One of the integers used to calculate the maximum value")
                 .Build(),
 
+            // TODO: Docs need updates
             new FunctionOverloadBuilder("max")
                 .WithReturnType(LanguageConstants.Int)
-                .WithFixedParameters(LanguageConstants.Array)
+                .WithDescription("Returns the maximum value from an array of integers.")
+                .WithRequiredParameter("intArray", LanguageConstants.Array, "The array of integers.")
                 .Build(),
 
             new FunctionOverloadBuilder("range")
                 .WithReturnType(LanguageConstants.Array)
-                .WithFixedParameters(LanguageConstants.Int, LanguageConstants.Int)
+                .WithDescription("Creates an array of integers from a starting integer and containing a number of items.")
+                .WithRequiredParameter("startIndex", LanguageConstants.Int, "The first integer in the array. The sum of startIndex and count must be no greater than 2147483647.")
+                .WithRequiredParameter("count", LanguageConstants.Int, "The number of integers in the array. Must be non-negative integer up to 10000.")
                 .Build(),
 
             new FunctionOverloadBuilder("base64ToString")
                 .WithReturnType(LanguageConstants.String)
-                .WithFixedParameters(LanguageConstants.String)
+                .WithDescription("Converts a base64 representation to a string.")
+                .WithRequiredParameter("base64Value", LanguageConstants.String, "The base64 representation to convert to a string.")
                 .Build(),
 
             new FunctionOverloadBuilder("base64ToJson")
                 .WithReturnType(LanguageConstants.Any)
-                .WithFixedParameters(LanguageConstants.String)
+                .WithDescription("Converts a base64 representation to a JSON object.")
+                .WithRequiredParameter("base64Value", LanguageConstants.String, "The base64 representation to convert to a JSON object.")
                 .Build(),
 
             new FunctionOverloadBuilder("uriComponentToString")
                 .WithReturnType(LanguageConstants.String)
-                .WithFixedParameters(LanguageConstants.String)
+                .WithDescription("Returns a string of a URI encoded value.")
+                .WithRequiredParameter("uriEncodedString", LanguageConstants.String, "The URI encoded value to convert to a string.")
                 .Build(),
 
             new FunctionOverloadBuilder("uriComponent")
                 .WithReturnType(LanguageConstants.String)
-                .WithFixedParameters(LanguageConstants.String)
+                .WithDescription("Encodes a URI.")
+                .WithRequiredParameter("stringToEncode", LanguageConstants.String, "The value to encode.")
                 .Build(),
 
             new FunctionOverloadBuilder("dataUriToString")
+                .WithDescription("Converts a data URI formatted value to a string.")
                 .WithReturnType(LanguageConstants.String)
-                .WithFixedParameters(LanguageConstants.String)
+                .WithRequiredParameter("dataUriToConvert", LanguageConstants.String, "The data URI value to convert.")
                 .Build(),
 
+            // TODO: Docs have wrong param type and param name (any is actually supported)
             new FunctionOverloadBuilder("dataUri")
                 .WithReturnType(LanguageConstants.String)
-                .WithFixedParameters(LanguageConstants.Any)
+                .WithDescription("Converts a value to a data URI.")
+                .WithRequiredParameter("valueToConvert", LanguageConstants.Any, "The value to convert to a data URI.")
                 .Build(),
 
             new FunctionOverloadBuilder("array")
+                .WithDescription("Converts the value to an array.")
                 .WithReturnType(LanguageConstants.Array)
-                .WithFixedParameters(LanguageConstants.Any)
+                .WithRequiredParameter("valueToConvert", LanguageConstants.Any, "The value to convert to an array.")
                 .Build(),
 
             new FunctionOverloadBuilder("coalesce")
